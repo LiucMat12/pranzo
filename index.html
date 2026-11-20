@@ -335,6 +335,7 @@ footer {
   </div>
 
   <p>
+    Il sapore delle cose fatte in casa.
     Scegli i tuoi piatti e conferma l'ordine.
   </p>
 
@@ -347,7 +348,7 @@ footer {
   class="notice"
   style="margin-top:12px"
 >
-  Connessione in corso…
+  Connessione sicura in corso…
 </div>
 
 <!-- NAVIGAZIONE -->
@@ -400,8 +401,8 @@ footer {
 
     <p id="chosen" class="muted"></p>
 
-    <button id="save" class="primary">
-      Conferma ordine
+    <button id="save" class="primary" disabled>
+      Connessione in corso…
     </button>
 
     <p id="error" role="status"></p>
@@ -471,6 +472,14 @@ import {
   deleteDoc
 } from
 "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+// NUOVO: AUTENTICAZIONE ANONIMA
+
+import {
+  getAuth,
+  signInAnonymously
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
 import { firebaseConfig } from "./config.js";
 
@@ -970,6 +979,12 @@ function label(k) {
 
 $("save").onclick = async () => {
 
+  if (!online) {
+    $("error").textContent =
+      "Attendi la connessione sicura a Firebase.";
+    return;
+  }
+
   let name = $("name").value.trim();
 
   let items = Object.fromEntries(
@@ -996,42 +1011,16 @@ $("save").onclick = async () => {
 
   try {
 
-    if (online) {
+    if (editing) {
 
-      if (editing) {
-
-        await updateDoc(
-          doc(db, "ordini", editing),
-          record
-        );
-
-      } else {
-
-        await addDoc(coll, record);
-
-      }
+      await updateDoc(
+        doc(db, "ordini", editing),
+        record
+      );
 
     } else {
 
-      if (editing) {
-
-        let i = orders.findIndex(
-          o => o.id === editing
-        );
-
-        orders[i] = {
-          id: editing,
-          ...record
-        };
-
-      } else {
-
-        orders.push({
-          id: crypto.randomUUID(),
-          ...record
-        });
-
-      }
+      await addDoc(coll, record);
 
     }
 
@@ -1054,7 +1043,7 @@ $("save").onclick = async () => {
 
   } finally {
 
-    $("save").disabled = false;
+    $("save").disabled = !online;
 
   }
 
@@ -1179,12 +1168,6 @@ $("persons").onclick = async e => {
 
         await deleteDoc(
           doc(db, "ordini", id)
-        );
-
-      } else {
-
-        orders = orders.filter(
-          x => x.id !== id
         );
 
       }
@@ -1348,7 +1331,7 @@ $("csv").onclick = () => {
 drawMenu();
 drawRecap();
 
-// COLLEGAMENTO FIREBASE
+// COLLEGAMENTO FIREBASE CON AUTENTICAZIONE
 
 try {
 
@@ -1363,9 +1346,16 @@ try {
 
   }
 
-  db = getFirestore(
-    initializeApp(firebaseConfig)
-  );
+  const app = initializeApp(firebaseConfig);
+
+  const auth = getAuth(app);
+
+  // Ogni dispositivo accede automaticamente
+  // senza email o password.
+
+  await signInAnonymously(auth);
+
+  db = getFirestore(app);
 
   coll = collection(db, "ordini");
 
@@ -1387,6 +1377,12 @@ try {
 
       $("status").style.background = "#e3f4e7";
 
+      $("save").disabled = false;
+
+      if (!editing) {
+        $("save").textContent = "Conferma ordine";
+      }
+
       drawRecap();
 
     },
@@ -1395,8 +1391,12 @@ try {
 
       online = false;
 
+      $("save").disabled = true;
+
       $("status").textContent =
         "Errore database: " + err.message;
+
+      $("status").style.background = "#ffe1d6";
 
     }
 
@@ -1404,8 +1404,14 @@ try {
 
 } catch (e) {
 
+  online = false;
+
+  $("save").disabled = true;
+
   $("status").textContent =
-    "⚠️ Modalità prova: controlla config.js.";
+    "⚠️ Errore autenticazione: " + e.message;
+
+  $("status").style.background = "#ffe1d6";
 
 }
 
