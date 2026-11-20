@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A tavola! · Ordini pranzo</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#20342b;background:#f5f6f2}*{box-sizing:border-box}body{margin:0}main{max-width:850px;margin:auto;padding:16px}.hero{background:#234d3b;color:white;padding:28px;border-radius:20px}h1{margin:6px 0}button,input,textarea,select{font:inherit}button{cursor:pointer}.tabs{display:flex;gap:8px;margin:18px 0}.tabs button,.filter{padding:10px 15px;background:white;border:1px solid #d8ded7;border-radius:12px}.tabs .active,.filter.active{background:#d9e8db}.filters{display:flex;overflow:auto;gap:7px;padding-bottom:12px}.panel{background:white;border:1px solid #dfe4dd;border-radius:16px;padding:17px;margin:12px 0}.dish{border-bottom:1px solid #edf0ec;padding:14px 0}.dish:last-child{border:0}.dishhead{display:flex;justify-content:space-between;gap:12px}.desc,.muted{color:#68776e;font-size:13px}.price{white-space:nowrap;font-weight:bold}.controls{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:8px}.controls button{height:34px;width:34px;border:1px solid #d7ded7;border-radius:9px;background:white;font-size:20px}.option{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:9px 0}.option span{font-size:13px}input,textarea{width:100%;padding:12px;border:1px solid #ccd6ce;border-radius:10px;margin-top:7px}label{font-weight:600}.primary{width:100%;background:#234d3b;color:white;border:0;padding:14px;border-radius:12px;font-weight:700;margin-top:12px}.row{display:flex;justify-content:space-between;gap:10px;padding:5px 0}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stat{font-size:30px;font-weight:700}.hidden{display:none}.person{border-bottom:1px solid #eee;padding:12px 0}.person button{margin-left:8px}.notice{font-size:12px;color:#7b5a28;background:#fff5da;padding:10px;border-radius:9px}footer{text-align:center;font-size:12px;color:#68776e;margin:20px 0}
+</style></head><body><main><header class="hero"><small>PRANZO DI GRUPPO</small><h1>A tavola! 🍝</h1><p>Scegli i piatti e conferma il tuo ordine.</p></header>
+<div id="status" class="notice" style="margin-top:12px">Connessione in corso…</div>
+<nav class="tabs"><button id="menuTab" class="active">🍽️ Ordina</button><button id="recapTab">📋 Riepilogo (<span id="n">0</span>)</button></nav>
+<section id="menuPage"><div class="panel"><label>Il tuo nome<input id="name" maxlength="80" placeholder="Nome e cognome"></label></div><div class="filters" id="filters"></div><div id="menu"></div>
+<div class="panel"><label>Note per il ristorante<textarea id="notes" rows="2" placeholder="Intolleranze, richieste..."></textarea></label><p id="chosen" class="muted"></p><button id="save" class="primary">Conferma ordine</button><p id="error" role="status"></p></div></section>
+<section id="recapPage" class="hidden"><div class="stats"><div class="panel"><div class="muted">Persone</div><div id="people" class="stat">0</div></div><div class="panel"><div class="muted">Piatti</div><div id="plates" class="stat">0</div></div></div><div class="panel"><h2>Totali per la cucina</h2><div id="totals"></div></div><div class="panel"><h2>Ordini individuali</h2><div id="persons"></div></div><button id="copy" class="primary">Copia riepilogo</button><button id="csv" class="primary">Scarica CSV</button></section>
+<footer>Prezzi indicativi · Nessun totale da pagare calcolato</footer></main>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js';
+import { getFirestore,collection,addDoc,onSnapshot,doc,updateDoc,deleteDoc } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
+import {firebaseConfig} from './config.js';
+const raw=[
+['Primi piatti','Tortellini in brodo',12,'Anche alla panna o in crema di parmigiano',['In brodo','Alla panna','In crema di parmigiano']],
+['Primi piatti','Tortelloni di ricotta montanara',10,''],
+['Primi piatti','Balanzoni',11,'Consigliati in crema di parmigiano'],
+['Primi piatti','Tagliatelle al ragù',9,'Bolognesi al 100%'],
+['Primi piatti','Tagliatelle verdi prosciutto e limone',9,'Le cucine romagnole'],
+['Primi piatti','Gramigna alla salsiccia',9,'Con un po’ di panna'],
+['Primi piatti','Gnocchi di patate',10,'Specificare il condimento',[],true],
+['Insalate',"La Gio'",9,'Insalata, radicchio, pomodoro, bresaola, scaglie di parmigiano'],
+['Insalate',"L’Ale",9,'Insalata, radicchio, pomodoro, finocchio, tonno, mozzarella di bufala'],
+['Insalate','La Rustica',9,'Insalata, radicchio, pomodoro, noci, speck croccante, glassa balsamica, scaglie di parmigiano'],
+['Insalate','La Leggera',9,'Insalata, finocchio, pomodoro, straccetti di pollo'],
+['Piatti freddi e secondi','Caprese',9,'Con mozzarella di bufala'],
+['Piatti freddi e secondi','Bresaola',10,'Con pomodorini, scaglie di parmigiano e rucola'],
+['Piatti freddi e secondi','Burratina con verdure',9,''],
+['Piatti freddi e secondi','Bufala e crudo',10,''],
+['Piatti freddi e secondi','Roast-beef',12,'Con pomodorini, scaglie di parmigiano e rucola'],
+['Dolci','Torta di riso',4,''],['Dolci','Fior di latte',4,''],['Dolci','Panna cotta',4,''],['Dolci','Tenerina al cioccolato',4,''],['Dolci','Semifreddo agli amaretti',4,''],
+['Fuori menù stagionale','Tortelloni di zucca e amaretti',12,'Scegli il condimento',['Burro e salvia','Ragù di salsiccia','Ragù classico']],
+['Fuori menù stagionale','Strozzapreti panna, speck e zucchine',11,''],
+['Fuori menù stagionale','Tagliatelle ai funghi porcini',12,''],
+['Fuori menù stagionale','Arrosto di tacchino',12,'Insalatina, finocchio, noci, salsa yogurt e patate'],
+['Fuori menù stagionale','Straccetti di pollo con speck, zucchine e panna',13,'Con patate al forno'],
+['Fuori menù stagionale','Cotoletta alla bolognese',13,'']
+].map((a,id)=>({id,cat:a[0],name:a[1],price:a[2],desc:a[3],options:a[4]||[],free:a[5]||false}));
+const $=id=>document.getElementById(id),escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cats=[...new Set(raw.map(d=>d.cat))];let filter='Tutti',cart={},orders=[],editing=null,db=null,coll=null,online=false;
+const key=(id,opt='')=>id+'|'+opt;
+function step(k){return `<div class="controls"><button data-key="${escape(k)}" data-step="-1">−</button><b>${cart[k]||0}</b><button data-key="${escape(k)}" data-step="1">+</button></div>`}
+function drawMenu(){
+ $('filters').innerHTML=['Tutti',...cats].map(c=>`<button class="filter ${filter===c?'active':''}" data-filter="${escape(c)}">${escape(c)}</button>`).join('');
+ $('menu').innerHTML=cats.filter(c=>filter==='Tutti'||filter===c).map(c=>`<div class="panel"><h2>${escape(c)}</h2>${raw.filter(d=>d.cat===c).map(d=>`<div class="dish"><div class="dishhead"><div><strong>${escape(d.name)}</strong><div class="desc">${escape(d.desc)}</div></div><span class="price">${d.price} €</span></div>${d.options.length?d.options.map(o=>`<div class="option"><span>${escape(o)}</span>${step(key(d.id,o))}</div>`).join(''):d.free?`<label class="muted">Condimento<input data-free="${d.id}" placeholder="Es. pomodoro" value="${escape(Object.keys(cart).find(k=>k.startsWith(d.id+'|')&&cart[k]>0)?.split('|').slice(1).join('|')||'')}"></label>${step(key(d.id,'__free__'))}`:step(key(d.id))}</div>`).join('')}</div>`).join('');
+ $('chosen').textContent='Piatti selezionati: '+Object.values(cart).reduce((a,b)=>a+b,0);
+}
+$('filters').onclick=e=>{const b=e.target.closest('[data-filter]');if(b){filter=b.dataset.filter;drawMenu()}};
+$('menu').onclick=e=>{const b=e.target.closest('[data-key]');if(!b)return;let k=b.dataset.key,delta=+b.dataset.step,[id,opt]=k.split('|');if(opt==='__free__'){const input=document.querySelector(`[data-free="${id}"]`),name=input.value.trim();if(delta>0&&!name){input.focus();$('error').textContent='Specifica il condimento degli gnocchi.';return}let old=Object.keys(cart).filter(x=>x.startsWith(id+'|'));let count=old.reduce((s,x)=>s+cart[x],0);old.forEach(x=>delete cart[x]);if(count+delta>0)cart[key(id,name)]=count+delta}else cart[k]=Math.max(0,(cart[k]||0)+delta);drawMenu()};
+$('menu').onchange=e=>{let inp=e.target.closest('[data-free]');if(!inp)return;let id=inp.dataset.free,keys=Object.keys(cart).filter(k=>k.startsWith(id+'|')),n=keys.reduce((s,k)=>s+cart[k],0);keys.forEach(k=>delete cart[k]);if(n&&inp.value.trim())cart[key(id,inp.value.trim())]=n;drawMenu()};
+function tab(t){$('menuPage').classList.toggle('hidden',t!=='menu');$('recapPage').classList.toggle('hidden',t!=='recap');$('menuTab').classList.toggle('active',t==='menu');$('recapTab').classList.toggle('active',t==='recap');if(t==='recap')drawRecap()}
+$('menuTab').onclick=()=>tab('menu');$('recapTab').onclick=()=>tab('recap');
+function label(k){let [id,...rest]=k.split('|');return raw[+id].name+(rest.join('|')?' — '+rest.join('|'):'')}
+$('save').onclick=async()=>{let name=$('name').value.trim(),items=Object.fromEntries(Object.entries(cart).filter(([k,v])=>v>0));if(!name||!Object.keys(items).length){$('error').textContent='Inserisci il nome e scegli almeno un piatto.';return}let record={name,items,notes:$('notes').value.trim()};$('save').disabled=true;try{if(online){if(editing)await updateDoc(doc(db,'ordini',editing),record);else await addDoc(coll,record)}else{if(editing){let i=orders.findIndex(o=>o.id===editing);orders[i]={id:editing,...record}}else orders.push({id:crypto.randomUUID(),...record})}cart={};editing=null;$('name').value='';$('notes').value='';$('error').textContent='';$('save').textContent='Conferma ordine';drawMenu();tab('recap')}catch(e){$('error').textContent='Errore salvataggio: '+e.message}finally{$('save').disabled=false}};
+function aggregate(){let t={};orders.forEach(o=>Object.entries(o.items).forEach(([k,v])=>t[k]=(t[k]||0)+v));return t}
+function drawRecap(){let t=aggregate();$('n').textContent=orders.length;$('people').textContent=orders.length;$('plates').textContent=Object.values(t).reduce((a,b)=>a+b,0);$('totals').innerHTML=Object.keys(t).length?Object.keys(t).sort((a,b)=>+a.split('|')[0]-+b.split('|')[0]).map(k=>`<div class="row"><span>${escape(label(k))}</span><strong>${t[k]} ×</strong></div>`).join(''):'Nessun ordine';$('persons').innerHTML=orders.length?orders.map(o=>`<div class="person"><strong>${escape(o.name)}</strong><button data-edit="${escape(o.id)}">Modifica</button><button data-delete="${escape(o.id)}">Elimina</button>${Object.entries(o.items).map(([k,q])=>`<div class="muted">${q} × ${escape(label(k))}</div>`).join('')}${o.notes?`<div class="muted">Note: ${escape(o.notes)}</div>`:''}</div>`).join(''):'Nessun partecipante'}
+$('persons').onclick=async e=>{let b=e.target.closest('button');if(!b)return;let id=b.dataset.edit??b.dataset.delete,o=orders.find(x=>x.id===id);if(!o)return;if(b.dataset.delete!==undefined){if(!confirm('Eliminare l’ordine di '+o.name+'?'))return;try{if(online)await deleteDoc(doc(db,'ordini',id));else orders=orders.filter(x=>x.id!==id);drawRecap()}catch(e){alert(e.message)}}else{editing=id;cart={...o.items};$('name').value=o.name;$('notes').value=o.notes;$('save').textContent='Salva modifiche';filter='Tutti';drawMenu();tab('menu')}};
+function report(){let t=aggregate();return 'PRANZO — '+orders.length+' persone\n\nTOTALI\n'+Object.keys(t).map(k=>t[k]+' × '+label(k)).join('\n')+'\n\nPERSONE\n'+orders.map(o=>o.name+'\n'+Object.entries(o.items).map(([k,q])=>q+' × '+label(k)).join('\n')+(o.notes?'\nNote: '+o.notes:'')).join('\n\n')}
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(report());$('copy').textContent='Copiato ✓';setTimeout(()=>$('copy').textContent='Copia riepilogo',1800)}catch(e){alert('Copia non disponibile su questo browser')}};
+$('csv').onclick=()=>{let rows=[['Nome','Categoria','Piatto','Condimento','Quantità','Note']];orders.forEach(o=>Object.entries(o.items).forEach(([k,q])=>{let [id,...opt]=k.split('|'),d=raw[+id];rows.push([o.name,d.cat,d.name,opt.join('|'),q,o.notes])}));let csv='\ufeff'+rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\r\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='ordini-pranzo.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+drawMenu();drawRecap();
+try{if(!firebaseConfig.apiKey||firebaseConfig.apiKey.includes('INSERISCI'))throw Error('Configurazione Firebase non ancora inserita');db=getFirestore(initializeApp(firebaseConfig));coll=collection(db,'ordini');onSnapshot(coll,snap=>{orders=snap.docs.map(d=>({id:d.id,...d.data()}));online=true;$('status').textContent='🟢 Ordini condivisi online';$('status').style.background='#e3f4e7';drawRecap()},err=>{$('status').textContent='Errore database: '+err.message});}catch(e){$('status').textContent='⚠️ Modalità prova: gli ordini non sono condivisi. Configura Firebase seguendo README.md';}
+</script></body></html>
