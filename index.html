@@ -1,1435 +1,1414 @@
 
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Balanzone 157 · Ordini pranzo</title>
+<title>Balanzone 157</title>
 
-  <style>
-    :root {
-      font-family: system-ui, -apple-system, sans-serif;
-      color: #513a25;
-      background: #fbf5e7;
-    }
+<style>
 
-    * {
-      box-sizing: border-box;
-    }
+:root {
+  font-family: system-ui, -apple-system, sans-serif;
+  color: #513a25;
+  background: #fbf5e7;
+}
 
-    body {
-      margin: 0;
-      background:
-        radial-gradient(circle at 90% 0%, #f5e3b6 0, transparent 35%),
-        #fbf5e7;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    main {
-      max-width: 850px;
-      margin: auto;
-      padding: 16px;
-    }
+body {
+  margin: 0;
+  background: #fbf5e7;
+}
 
-    .hero {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(
-        135deg,
-        #e7ae51,
-        #f3cd82 60%,
-        #f7dfac
-      );
-      color: #53371f;
-      padding: 29px 26px;
-      border-radius: 23px;
-      border: 1px solid #e0b36d;
-      box-shadow: 0 6px 22px #79512617;
-    }
+main {
+  max-width: 850px;
+  margin: auto;
+  padding: 16px;
+}
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      right: -65px;
-      bottom: -100px;
-      width: 270px;
-      height: 270px;
-      border: 2px solid #fff5d055;
-      border-radius: 50%;
-      pointer-events: none;
-    }
+/* TESTATA GIALLA */
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+.hero {
+  background: linear-gradient(
+    135deg,
+    #e7ae51,
+    #f3cd82 60%,
+    #f7dfac
+  );
+  color: #53371f;
+  padding: 28px;
+  border-radius: 22px;
+  border: 1px solid #e0b36d;
+}
 
-    .tortellino {
-      flex: 0 0 76px;
-      width: 76px;
-      height: 76px;
-      object-fit: contain;
-      filter: drop-shadow(0 3px 2px #a66c292e);
-    }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
 
-    .eyebrow {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #8c5529;
-    }
+.tortellino {
+  width: 78px;
+  height: 78px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 3px #a66c2940);
+}
 
-    .hero h1 {
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(32px, 6vw, 48px);
-      letter-spacing: -0.04em;
-      margin: 4px 0;
-    }
+.eyebrow {
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #8c5529;
+}
 
-    .hero p {
-      margin: 12px 0 0;
-      color: #704825;
-      font-size: 15px;
-    }
+h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(32px, 6vw, 48px);
+  margin: 4px 0;
+}
 
-    h2 {
-      font-family: Georgia, "Times New Roman", serif;
-      color: #754521;
-      font-size: 23px;
-      margin: 3px 0 14px;
-    }
+.hero p {
+  color: #704825;
+  margin-bottom: 0;
+}
 
-    button,
-    input,
-    textarea {
-      font: inherit;
-    }
+h2 {
+  font-family: Georgia, serif;
+  color: #754521;
+}
 
-    button {
-      cursor: pointer;
-    }
+button,
+input,
+textarea {
+  font: inherit;
+}
 
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin: 18px 0;
-    }
+button {
+  cursor: pointer;
+}
 
-    .tabs button,
-    .filter {
-      padding: 10px 15px;
-      background: #fffaf0;
-      border: 1px solid #e6d5b9;
-      color: #704826;
-      border-radius: 12px;
-      font-weight: 600;
-    }
+/* NAVIGAZIONE */
 
-    .tabs .active,
-    .filter.active {
-      background: #bd7046;
-      color: white;
-      border-color: #bd7046;
-    }
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0;
+}
 
-    .filters {
-      display: flex;
-      overflow-x: auto;
-      gap: 7px;
-      padding-bottom: 12px;
-    }
+.tabs button,
+.filter {
+  padding: 10px 15px;
+  background: #fffaf0;
+  border: 1px solid #e6d5b9;
+  color: #704826;
+  border-radius: 12px;
+  font-weight: 600;
+}
 
-    .filter {
-      flex-shrink: 0;
-    }
+.tabs .active,
+.filter.active {
+  background: #bd7046;
+  color: white;
+  border-color: #bd7046;
+}
 
-    .panel {
-      background: #fffdf7;
-      border: 1px solid #e8dbc4;
-      border-radius: 16px;
-      padding: 17px;
-      margin: 12px 0;
-      box-shadow: 0 2px 8px #76502d09;
-    }
+.filters {
+  display: flex;
+  overflow-x: auto;
+  gap: 7px;
+  padding-bottom: 12px;
+}
 
-    .dish {
-      border-bottom: 1px solid #f0e5d1;
-      padding: 14px 0;
-    }
+.filter {
+  flex-shrink: 0;
+}
 
-    .dish:last-child {
-      border: 0;
-    }
+/* RIQUADRI */
 
-    .dishhead {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-    }
+.panel {
+  background: #fffdf7;
+  border: 1px solid #e8dbc4;
+  border-radius: 16px;
+  padding: 17px;
+  margin: 12px 0;
+}
 
-    .dishhead strong {
-      font-size: 16px;
-    }
+.dish {
+  border-bottom: 1px solid #f0e5d1;
+  padding: 14px 0;
+}
 
-    .desc,
-    .muted {
-      color: #8a7661;
-      font-size: 13px;
-    }
+.dish:last-child {
+  border: 0;
+}
 
-    .price {
-      white-space: nowrap;
-      font-weight: bold;
-      color: #ad663c;
-    }
+.dishhead {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
 
-    .controls {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 12px;
-      margin-top: 8px;
-    }
+.desc,
+.muted {
+  color: #8a7661;
+  font-size: 13px;
+}
 
-    .controls button {
-      height: 34px;
-      width: 34px;
-      border: 1px solid #dfc9a6;
-      border-radius: 9px;
-      background: #fff6e4;
-      color: #7d492d;
-      font-size: 20px;
-    }
+.price {
+  white-space: nowrap;
+  font-weight: bold;
+  color: #ad663c;
+}
 
-    .option {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin: 9px 0;
-    }
+/* QUANTITÀ */
 
-    .option span {
-      font-size: 13px;
-    }
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
 
-    input,
-    textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #d9c7a9;
-      background: #fffefa;
-      border-radius: 10px;
-      margin-top: 7px;
-      color: #513a25;
-    }
+.controls button {
+  height: 34px;
+  width: 34px;
+  border: 1px solid #dfc9a6;
+  border-radius: 9px;
+  background: #fff6e4;
+  color: #7d492d;
+  font-size: 20px;
+}
 
-    label {
-      font-weight: 600;
-    }
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 9px 0;
+}
 
-    .primary {
-      width: 100%;
-      background: #a95632;
-      color: white;
-      border: 0;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      margin-top: 12px;
-    }
+.option span {
+  font-size: 13px;
+}
 
-    .primary:hover {
-      background: #904528;
-    }
+/* CAMPI */
 
-    .primary:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
+input,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d9c7a9;
+  border-radius: 10px;
+  margin-top: 7px;
+  background: #fffefa;
+  color: #513a25;
+}
 
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 5px 0;
-    }
+label {
+  font-weight: 600;
+}
 
-    .stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+/* PULSANTI */
 
-    .stat {
-      font-size: 30px;
-      font-weight: 700;
-      color: #a95632;
-    }
+.primary {
+  width: 100%;
+  background: #a95632;
+  color: white;
+  border: 0;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: bold;
+  margin-top: 12px;
+}
 
-    .hidden {
-      display: none;
-    }
+.primary:disabled {
+  opacity: 0.6;
+}
 
-    .person {
-      border-bottom: 1px solid #eee0ca;
-      padding: 12px 0;
-    }
+/* RIEPILOGO */
 
-    .person button {
-      margin-left: 8px;
-      background: #f5e4c9;
-      border: 1px solid #e4c8a4;
-      border-radius: 7px;
-      padding: 5px 8px;
-      color: #754521;
-    }
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 0;
+}
 
-    .notice {
-      font-size: 12px;
-      color: #785325;
-      background: #fff0ce;
-      padding: 10px;
-      border-radius: 9px;
-    }
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
 
-    footer {
-      text-align: center;
-      font-size: 12px;
-      color: #8a7661;
-      margin: 20px 0;
-    }
+.stat {
+  font-size: 30px;
+  font-weight: bold;
+  color: #a95632;
+}
 
-    @media (max-width: 450px) {
-      .tortellino {
-        width: 58px;
-        height: 58px;
-        flex-basis: 58px;
-      }
+.hidden {
+  display: none;
+}
 
-      .brand {
-        gap: 11px;
-      }
+.person {
+  border-bottom: 1px solid #eee0ca;
+  padding: 12px 0;
+}
 
-      .hero {
-        padding: 23px 17px;
-      }
+.person button {
+  margin-left: 8px;
+  background: #f5e4c9;
+  border: 1px solid #e4c8a4;
+  border-radius: 7px;
+  padding: 5px 8px;
+  color: #754521;
+}
 
-      .hero h1 {
-        font-size: 34px;
-      }
-    }
-  </style>
+.notice {
+  font-size: 12px;
+  color: #785325;
+  background: #fff0ce;
+  padding: 10px;
+  border-radius: 9px;
+}
+
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: #8a7661;
+  margin: 20px 0;
+}
+
+@media (max-width: 450px) {
+  .hero {
+    padding: 20px 15px;
+  }
+
+  .brand {
+    gap: 10px;
+  }
+
+  .tortellino {
+    width: 58px;
+    height: 58px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+}
+
+</style>
 </head>
 
 <body>
+
 <main>
 
-  <!-- INTESTAZIONE -->
+<!-- TESTATA -->
 
-  <header class="hero">
-    <div class="brand">
+<header class="hero">
 
-      <img
-        class="tortellino"
-        src="tortellino.png"
-        alt="Tortellino"
-      >
+  <div class="brand">
 
-      <div>
-        <div class="eyebrow">Pranzo di gruppo</div>
-        <h1>Balanzone 157</h1>
+    <img
+      class="tortellino"
+      src="tortellino.png"
+      alt="Tortellino"
+    >
+
+    <div>
+      <div class="eyebrow">
+        Pranzo di gruppo
       </div>
 
+      <h1>Balanzone 157</h1>
     </div>
 
-    <p>
-      Il sapore delle cose fatte in casa.
-      Scegli i tuoi piatti e conferma l’ordine.
-    </p>
-  </header>
-
-  <!-- STATO CONNESSIONE -->
-
-  <div
-    id="status"
-    class="notice"
-    style="margin-top:12px"
-  >
-    Connessione in corso…
   </div>
 
-  <!-- NAVIGAZIONE -->
+  <p>
+    Il sapore delle cose fatte in casa.
+    Scegli i tuoi piatti e conferma l'ordine.
+  </p>
 
-  <nav class="tabs">
-    <button id="menuTab" class="active">
-      🍽️ Ordina
+</header>
+
+<!-- STATO DATABASE -->
+
+<div
+  id="status"
+  class="notice"
+  style="margin-top:12px"
+>
+  Connessione in corso…
+</div>
+
+<!-- NAVIGAZIONE -->
+
+<nav class="tabs">
+
+  <button id="menuTab" class="active">
+    🍽️ Ordina
+  </button>
+
+  <button id="recapTab">
+    📋 Riepilogo (<span id="n">0</span>)
+  </button>
+
+</nav>
+
+<!-- MENU -->
+
+<section id="menuPage">
+
+  <div class="panel">
+
+    <label>
+      Il tuo nome
+
+      <input
+        id="name"
+        maxlength="80"
+        placeholder="Nome e cognome"
+      >
+    </label>
+
+  </div>
+
+  <div class="filters" id="filters"></div>
+
+  <div id="menu"></div>
+
+  <div class="panel">
+
+    <label>
+      Note per il ristorante
+
+      <textarea
+        id="notes"
+        rows="2"
+        placeholder="Richieste particolari..."
+      ></textarea>
+    </label>
+
+    <p id="chosen" class="muted"></p>
+
+    <button id="save" class="primary">
+      Conferma ordine
     </button>
 
-    <button id="recapTab">
-      📋 Riepilogo (<span id="n">0</span>)
-    </button>
-  </nav>
+    <p id="error" role="status"></p>
 
-  <!-- PAGINA ORDINI -->
+  </div>
 
-  <section id="menuPage">
+</section>
 
-    <div class="panel">
-      <label>
-        Il tuo nome
-        <input
-          id="name"
-          maxlength="80"
-          placeholder="Nome e cognome"
-        >
-      </label>
-    </div>
+<!-- RIEPILOGO -->
 
-    <div class="filters" id="filters"></div>
+<section id="recapPage" class="hidden">
 
-    <div id="menu"></div>
+  <div class="stats">
 
     <div class="panel">
-
-      <label>
-        Note per il ristorante
-        <textarea
-          id="notes"
-          rows="2"
-          placeholder="Richieste particolari..."
-        ></textarea>
-      </label>
-
-      <p id="chosen" class="muted"></p>
-
-      <button id="save" class="primary">
-        Conferma ordine
-      </button>
-
-      <p id="error" role="status"></p>
-
-    </div>
-
-  </section>
-
-  <!-- PAGINA RIEPILOGO -->
-
-  <section id="recapPage" class="hidden">
-
-    <div class="stats">
-
-      <div class="panel">
-        <div class="muted">Persone</div>
-        <div id="people" class="stat">0</div>
-      </div>
-
-      <div class="panel">
-        <div class="muted">Piatti</div>
-        <div id="plates" class="stat">0</div>
-      </div>
-
+      <div class="muted">Persone</div>
+      <div id="people" class="stat">0</div>
     </div>
 
     <div class="panel">
-      <h2>Totali per la cucina</h2>
-      <div id="totals"></div>
+      <div class="muted">Piatti</div>
+      <div id="plates" class="stat">0</div>
     </div>
 
-    <div class="panel">
-      <h2>Ordini individuali</h2>
-      <div id="persons"></div>
-    </div>
+  </div>
 
-    <button id="copy" class="primary">
-      Copia riepilogo
-    </button>
+  <div class="panel">
+    <h2>Totali per la cucina</h2>
+    <div id="totals"></div>
+  </div>
 
-    <button id="csv" class="primary">
-      Scarica CSV
-    </button>
+  <div class="panel">
+    <h2>Ordini individuali</h2>
+    <div id="persons"></div>
+  </div>
 
-  </section>
+  <button id="copy" class="primary">
+    Copia riepilogo
+  </button>
 
-  <footer>
-    Prezzi indicativi · Nessun totale da pagare calcolato
-  </footer>
+  <button id="csv" class="primary">
+    Scarica CSV
+  </button>
+
+</section>
+
+<footer>
+  Prezzi indicativi · Nessun totale da pagare calcolato
+</footer>
 
 </main>
 
 <script type="module">
 
-  // FIREBASE
+// FIREBASE
 
-  import { initializeApp } from
-    "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 
-  import {
-    getFirestore,
-    collection,
-    addDoc,
-    onSnapshot,
-    doc,
-    updateDoc,
-    deleteDoc
-  } from
-    "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  doc,
+  updateDoc,
+  deleteDoc
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-  import { firebaseConfig } from "./config.js";
+import { firebaseConfig } from "./config.js";
 
-  // MENU COMPLETO
+// MENU
 
-  const raw = [
+const raw = [
 
-    // PRIMI PIATTI
+  // PRIMI PIATTI
 
+  [
+    "Primi piatti",
+    "Tortellini in brodo",
+    12,
+    "Anche alla panna o in crema di parmigiano",
     [
-      "Primi piatti",
-      "Tortellini in brodo",
-      12,
-      "Anche alla panna o in crema di parmigiano",
-      [
-        "In brodo",
-        "Alla panna",
-        "In crema di parmigiano"
-      ]
-    ],
-
-    [
-      "Primi piatti",
-      "Tortelloni di ricotta montanara",
-      10,
-      ""
-    ],
-
-    [
-      "Primi piatti",
-      "Balanzoni",
-      11,
-      "Consigliati in crema di parmigiano"
-    ],
-
-    [
-      "Primi piatti",
-      "Tagliatelle al ragù",
-      9,
-      "Bolognesi al 100%"
-    ],
-
-    [
-      "Primi piatti",
-      "Tagliatelle verdi prosciutto e limone",
-      9,
-      "Le cucine romagnole"
-    ],
-
-    [
-      "Primi piatti",
-      "Gramigna alla salsiccia",
-      9,
-      "Con un po’ di panna"
-    ],
-
-    [
-      "Primi piatti",
-      "Gnocchi di patate",
-      10,
-      "Specificare il condimento",
-      [],
-      true
-    ],
-
-    // INSALATE
-
-    [
-      "Insalate",
-      "La Gio'",
-      9,
-      "Insalata, radicchio, pomodoro, bresaola, scaglie di parmigiano"
-    ],
-
-    [
-      "Insalate",
-      "L’Ale",
-      9,
-      "Insalata, radicchio, pomodoro, finocchio, tonno, mozzarella di bufala"
-    ],
-
-    [
-      "Insalate",
-      "La Rustica",
-      9,
-      "Insalata, radicchio, pomodoro, noci, speck croccante, glassa balsamica, scaglie di parmigiano"
-    ],
-
-    [
-      "Insalate",
-      "La Leggera",
-      9,
-      "Insalata, finocchio, pomodoro, straccetti di pollo"
-    ],
-
-    // PIATTI FREDDI E SECONDI
-
-    [
-      "Piatti freddi e secondi",
-      "Caprese",
-      9,
-      "Con mozzarella di bufala"
-    ],
-
-    [
-      "Piatti freddi e secondi",
-      "Bresaola",
-      10,
-      "Con pomodorini, scaglie di parmigiano e rucola"
-    ],
-
-    [
-      "Piatti freddi e secondi",
-      "Burratina con verdure",
-      9,
-      ""
-    ],
-
-    [
-      "Piatti freddi e secondi",
-      "Bufala e crudo",
-      10,
-      ""
-    ],
-
-    [
-      "Piatti freddi e secondi",
-      "Roast-beef",
-      12,
-      "Con pomodorini, scaglie di parmigiano e rucola"
-    ],
-
-    // DOLCI
-
-    [
-      "Dolci",
-      "Torta di riso",
-      4,
-      ""
-    ],
-
-    [
-      "Dolci",
-      "Fior di latte",
-      4,
-      ""
-    ],
-
-    [
-      "Dolci",
-      "Panna cotta",
-      4,
-      ""
-    ],
-
-    [
-      "Dolci",
-      "Tenerina al cioccolato",
-      4,
-      ""
-    ],
-
-    [
-      "Dolci",
-      "Semifreddo agli amaretti",
-      4,
-      ""
-    ],
-
-    // FUORI MENU STAGIONALE
-
-    [
-      "Fuori menù stagionale",
-      "Tortelloni di zucca e amaretti",
-      12,
-      "Scegli il condimento",
-      [
-        "Burro e salvia",
-        "Ragù di salsiccia",
-        "Ragù classico"
-      ]
-    ],
-
-    [
-      "Fuori menù stagionale",
-      "Strozzapreti panna, speck e zucchine",
-      11,
-      ""
-    ],
-
-    [
-      "Fuori menù stagionale",
-      "Tagliatelle ai funghi porcini",
-      12,
-      ""
-    ],
-
-    [
-      "Fuori menù stagionale",
-      "Arrosto di tacchino",
-      12,
-      "Insalatina, finocchio, noci, salsa yogurt e patate"
-    ],
-
-    [
-      "Fuori menù stagionale",
-      "Straccetti di pollo con speck, zucchine e panna",
-      13,
-      "Con patate al forno"
-    ],
-
-    [
-      "Fuori menù stagionale",
-      "Cotoletta alla bolognese",
-      13,
-      ""
+      "In brodo",
+      "Alla panna",
+      "In crema di parmigiano"
     ]
+  ],
 
-  ].map((a, id) => ({
-    id,
-    cat: a[0],
-    name: a[1],
-    price: a[2],
-    desc: a[3],
-    options: a[4] || [],
-    free: a[5] || false
-  }));
+  [
+    "Primi piatti",
+    "Tortelloni di ricotta montanara",
+    10,
+    ""
+  ],
 
-  // UTILITÀ
+  [
+    "Primi piatti",
+    "Balanzoni",
+    11,
+    "Consigliati in crema di parmigiano"
+  ],
 
-  const $ = id => document.getElementById(id);
+  [
+    "Primi piatti",
+    "Tagliatelle al ragù",
+    9,
+    "Bolognesi al 100%"
+  ],
 
-  const escape = s =>
-    String(s).replace(/[&<>"']/g, c => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    }[c]));
+  [
+    "Primi piatti",
+    "Tagliatelle verdi prosciutto e limone",
+    9,
+    "Le cucine romagnole"
+  ],
 
-  const cats = [...new Set(raw.map(d => d.cat))];
+  [
+    "Primi piatti",
+    "Gramigna alla salsiccia",
+    9,
+    "Con un po' di panna"
+  ],
 
-  let filter = "Tutti";
-  let cart = {};
-  let orders = [];
-  let editing = null;
-  let db = null;
-  let coll = null;
-  let online = false;
+  [
+    "Primi piatti",
+    "Gnocchi di patate",
+    10,
+    "Specificare il condimento",
+    [],
+    true
+  ],
 
-  const key = (id, opt = "") => id + "|" + opt;
+  // INSALATE
 
-  // PULSANTI QUANTITÀ
+  [
+    "Insalate",
+    "La Gio'",
+    9,
+    "Insalata, radicchio, pomodoro, bresaola, scaglie di parmigiano"
+  ],
 
-  function step(k) {
-    return `
-      <div class="controls">
-        <button data-key="${escape(k)}" data-step="-1">
-          −
-        </button>
-        <b>${cart[k] || 0}</b>
-        <button data-key="${escape(k)}" data-step="1">
-          +
-        </button>
-      </div>
-    `;
-  }
+  [
+    "Insalate",
+    "L'Ale",
+    9,
+    "Insalata, radicchio, pomodoro, finocchio, tonno, mozzarella di bufala"
+  ],
 
-  // DISEGNA IL MENU
+  [
+    "Insalate",
+    "La Rustica",
+    9,
+    "Insalata, radicchio, pomodoro, noci, speck croccante, glassa balsamica, scaglie di parmigiano"
+  ],
 
-  function drawMenu() {
+  [
+    "Insalate",
+    "La Leggera",
+    9,
+    "Insalata, finocchio, pomodoro, straccetti di pollo"
+  ],
 
-    $("filters").innerHTML =
-      ["Tutti", ...cats].map(c => `
-        <button
-          class="filter ${filter === c ? "active" : ""}"
-          data-filter="${escape(c)}"
-        >
-          ${escape(c)}
-        </button>
-      `).join("");
+  // PIATTI FREDDI E SECONDI
 
-    $("menu").innerHTML = cats
-      .filter(c => filter === "Tutti" || filter === c)
-      .map(c => `
+  [
+    "Piatti freddi e secondi",
+    "Caprese",
+    9,
+    "Con mozzarella di bufala"
+  ],
 
-        <div class="panel">
+  [
+    "Piatti freddi e secondi",
+    "Bresaola",
+    10,
+    "Con pomodorini, scaglie di parmigiano e rucola"
+  ],
 
-          <h2>${escape(c)}</h2>
+  [
+    "Piatti freddi e secondi",
+    "Burratina con verdure",
+    9,
+    ""
+  ],
 
-          ${raw.filter(d => d.cat === c).map(d => `
+  [
+    "Piatti freddi e secondi",
+    "Bufala e crudo",
+    10,
+    ""
+  ],
 
-            <div class="dish">
+  [
+    "Piatti freddi e secondi",
+    "Roast-beef",
+    12,
+    "Con pomodorini, scaglie di parmigiano e rucola"
+  ],
 
-              <div class="dishhead">
+  // DOLCI
 
-                <div>
-                  <strong>${escape(d.name)}</strong>
-                  <div class="desc">
-                    ${escape(d.desc)}
-                  </div>
-                </div>
+  [
+    "Dolci",
+    "Torta di riso",
+    4,
+    ""
+  ],
 
-                <span class="price">
-                  ${d.price} €
-                </span>
+  [
+    "Dolci",
+    "Fior di latte",
+    4,
+    ""
+  ],
 
+  [
+    "Dolci",
+    "Panna cotta",
+    4,
+    ""
+  ],
+
+  [
+    "Dolci",
+    "Tenerina al cioccolato",
+    4,
+    ""
+  ],
+
+  [
+    "Dolci",
+    "Semifreddo agli amaretti",
+    4,
+    ""
+  ],
+
+  // FUORI MENU STAGIONALE
+
+  [
+    "Fuori menù stagionale",
+    "Tortelloni di zucca e amaretti",
+    12,
+    "Scegli il condimento",
+    [
+      "Burro e salvia",
+      "Ragù di salsiccia",
+      "Ragù classico"
+    ]
+  ],
+
+  [
+    "Fuori menù stagionale",
+    "Strozzapreti panna, speck e zucchine",
+    11,
+    ""
+  ],
+
+  [
+    "Fuori menù stagionale",
+    "Tagliatelle ai funghi porcini",
+    12,
+    ""
+  ],
+
+  [
+    "Fuori menù stagionale",
+    "Arrosto di tacchino",
+    12,
+    "Insalatina, finocchio, noci, salsa yogurt e patate"
+  ],
+
+  [
+    "Fuori menù stagionale",
+    "Straccetti di pollo con speck, zucchine e panna",
+    13,
+    "Con patate al forno"
+  ],
+
+  [
+    "Fuori menù stagionale",
+    "Cotoletta alla bolognese",
+    13,
+    ""
+  ]
+
+].map((a, id) => ({
+  id,
+  cat: a[0],
+  name: a[1],
+  price: a[2],
+  desc: a[3],
+  options: a[4] || [],
+  free: a[5] || false
+}));
+
+// FUNZIONI DI BASE
+
+const $ = id => document.getElementById(id);
+
+const escape = s =>
+  String(s).replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[c]));
+
+const cats = [...new Set(raw.map(d => d.cat))];
+
+let filter = "Tutti";
+let cart = {};
+let orders = [];
+let editing = null;
+let db = null;
+let coll = null;
+let online = false;
+
+const key = (id, opt = "") => id + "|" + opt;
+
+// CONTROLLI QUANTITÀ
+
+function step(k) {
+  return `
+    <div class="controls">
+      <button data-key="${escape(k)}" data-step="-1">−</button>
+      <b>${cart[k] || 0}</b>
+      <button data-key="${escape(k)}" data-step="1">+</button>
+    </div>
+  `;
+}
+
+// DISEGNA MENU
+
+function drawMenu() {
+
+  $("filters").innerHTML =
+    ["Tutti", ...cats].map(c => `
+      <button
+        class="filter ${filter === c ? "active" : ""}"
+        data-filter="${escape(c)}"
+      >
+        ${escape(c)}
+      </button>
+    `).join("");
+
+  $("menu").innerHTML = cats
+    .filter(c => filter === "Tutti" || filter === c)
+    .map(c => `
+
+      <div class="panel">
+
+        <h2>${escape(c)}</h2>
+
+        ${raw.filter(d => d.cat === c).map(d => `
+
+          <div class="dish">
+
+            <div class="dishhead">
+
+              <div>
+                <strong>${escape(d.name)}</strong>
+                <div class="desc">${escape(d.desc)}</div>
               </div>
 
-              ${
-                d.options.length
-
-                  ? d.options.map(o => `
-                    <div class="option">
-                      <span>${escape(o)}</span>
-                      ${step(key(d.id, o))}
-                    </div>
-                  `).join("")
-
-                  : d.free
-
-                    ? `
-                      <label class="muted">
-                        Condimento
-                        <input
-                          data-free="${d.id}"
-                          placeholder="Es. pomodoro"
-                          value="${escape(
-                            Object.keys(cart)
-                              .find(k =>
-                                k.startsWith(d.id + "|") &&
-                                cart[k] > 0
-                              )
-                              ?.split("|")
-                              .slice(1)
-                              .join("|") || ""
-                          )}"
-                        >
-                      </label>
-
-                      ${step(key(d.id, "__free__"))}
-                    `
-
-                    : step(key(d.id))
-              }
+              <span class="price">${d.price} €</span>
 
             </div>
 
-          `).join("")}
+            ${
+              d.options.length
 
-        </div>
+                ? d.options.map(o => `
+                  <div class="option">
+                    <span>${escape(o)}</span>
+                    ${step(key(d.id, o))}
+                  </div>
+                `).join("")
 
-      `).join("");
+                : d.free
 
-    $("chosen").textContent =
-      "Piatti selezionati: " +
-      Object.values(cart).reduce((a, b) => a + b, 0);
+                  ? `
+                    <label class="muted">
+                      Condimento
+                      <input
+                        data-free="${d.id}"
+                        placeholder="Es. pomodoro"
+                        value="${escape(
+                          Object.keys(cart)
+                            .find(k =>
+                              k.startsWith(d.id + "|") &&
+                              cart[k] > 0
+                            )
+                            ?.split("|")
+                            .slice(1)
+                            .join("|") || ""
+                        )}"
+                      >
+                    </label>
+
+                    ${step(key(d.id, "__free__"))}
+                  `
+
+                  : step(key(d.id))
+            }
+
+          </div>
+
+        `).join("")}
+
+      </div>
+
+    `).join("");
+
+  $("chosen").textContent =
+    "Piatti selezionati: " +
+    Object.values(cart).reduce((a, b) => a + b, 0);
+}
+
+// FILTRI
+
+$("filters").onclick = e => {
+
+  const b = e.target.closest("[data-filter]");
+
+  if (b) {
+    filter = b.dataset.filter;
+    drawMenu();
   }
 
-  // FILTRI CATEGORIE
+};
 
-  $("filters").onclick = e => {
+// AGGIUNGI / RIMUOVI
 
-    const b = e.target.closest("[data-filter]");
+$("menu").onclick = e => {
 
-    if (b) {
-      filter = b.dataset.filter;
-      drawMenu();
+  const b = e.target.closest("[data-key]");
+
+  if (!b) return;
+
+  let k = b.dataset.key;
+  let delta = +b.dataset.step;
+  let [id, opt] = k.split("|");
+
+  if (opt === "__free__") {
+
+    const input = document.querySelector(
+      `[data-free="${id}"]`
+    );
+
+    const name = input.value.trim();
+
+    if (delta > 0 && !name) {
+      input.focus();
+      $("error").textContent =
+        "Specifica il condimento degli gnocchi.";
+      return;
     }
 
+    let old = Object.keys(cart).filter(
+      x => x.startsWith(id + "|")
+    );
+
+    let count = old.reduce(
+      (s, x) => s + cart[x],
+      0
+    );
+
+    old.forEach(x => delete cart[x]);
+
+    if (count + delta > 0) {
+      cart[key(id, name)] = count + delta;
+    }
+
+  } else {
+
+    cart[k] = Math.max(
+      0,
+      (cart[k] || 0) + delta
+    );
+
+  }
+
+  drawMenu();
+
+};
+
+// CONDIMENTO GNOCCHI
+
+$("menu").onchange = e => {
+
+  let inp = e.target.closest("[data-free]");
+
+  if (!inp) return;
+
+  let id = inp.dataset.free;
+
+  let keys = Object.keys(cart).filter(
+    k => k.startsWith(id + "|")
+  );
+
+  let n = keys.reduce(
+    (s, k) => s + cart[k],
+    0
+  );
+
+  keys.forEach(k => delete cart[k]);
+
+  if (n && inp.value.trim()) {
+    cart[key(id, inp.value.trim())] = n;
+  }
+
+  drawMenu();
+
+};
+
+// CAMBIO SCHERMATA
+
+function tab(t) {
+
+  $("menuPage").classList.toggle(
+    "hidden",
+    t !== "menu"
+  );
+
+  $("recapPage").classList.toggle(
+    "hidden",
+    t !== "recap"
+  );
+
+  $("menuTab").classList.toggle(
+    "active",
+    t === "menu"
+  );
+
+  $("recapTab").classList.toggle(
+    "active",
+    t === "recap"
+  );
+
+  if (t === "recap") {
+    drawRecap();
+  }
+
+}
+
+$("menuTab").onclick = () => tab("menu");
+$("recapTab").onclick = () => tab("recap");
+
+// ETICHETTA PIATTO
+
+function label(k) {
+
+  let [id, ...rest] = k.split("|");
+
+  return raw[+id].name +
+    (rest.join("|")
+      ? " — " + rest.join("|")
+      : "");
+
+}
+
+// SALVA ORDINE
+
+$("save").onclick = async () => {
+
+  let name = $("name").value.trim();
+
+  let items = Object.fromEntries(
+    Object.entries(cart).filter(
+      ([k, v]) => v > 0
+    )
+  );
+
+  if (!name || !Object.keys(items).length) {
+
+    $("error").textContent =
+      "Inserisci il nome e scegli almeno un piatto.";
+
+    return;
+  }
+
+  let record = {
+    name,
+    items,
+    notes: $("notes").value.trim()
   };
 
-  // AGGIUNGI / RIMUOVI PIATTI
+  $("save").disabled = true;
 
-  $("menu").onclick = e => {
+  try {
 
-    const b = e.target.closest("[data-key]");
+    if (online) {
 
-    if (!b) return;
+      if (editing) {
 
-    let k = b.dataset.key;
-    let delta = +b.dataset.step;
-    let [id, opt] = k.split("|");
+        await updateDoc(
+          doc(db, "ordini", editing),
+          record
+        );
 
-    if (opt === "__free__") {
+      } else {
 
-      const input = document.querySelector(
-        `[data-free="${id}"]`
-      );
+        await addDoc(coll, record);
 
-      const name = input.value.trim();
-
-      if (delta > 0 && !name) {
-        input.focus();
-        $("error").textContent =
-          "Specifica il condimento degli gnocchi.";
-        return;
-      }
-
-      let old = Object.keys(cart).filter(
-        x => x.startsWith(id + "|")
-      );
-
-      let count = old.reduce(
-        (s, x) => s + cart[x],
-        0
-      );
-
-      old.forEach(x => delete cart[x]);
-
-      if (count + delta > 0) {
-        cart[key(id, name)] = count + delta;
       }
 
     } else {
 
-      cart[k] = Math.max(
-        0,
-        (cart[k] || 0) + delta
-      );
+      if (editing) {
+
+        let i = orders.findIndex(
+          o => o.id === editing
+        );
+
+        orders[i] = {
+          id: editing,
+          ...record
+        };
+
+      } else {
+
+        orders.push({
+          id: crypto.randomUUID(),
+          ...record
+        });
+
+      }
 
     }
+
+    cart = {};
+    editing = null;
+
+    $("name").value = "";
+    $("notes").value = "";
+    $("error").textContent = "";
+
+    $("save").textContent = "Conferma ordine";
 
     drawMenu();
+    tab("recap");
 
-  };
+  } catch (e) {
 
-  // CONDIMENTO LIBERO GNOCCHI
+    $("error").textContent =
+      "Errore salvataggio: " + e.message;
 
-  $("menu").onchange = e => {
+  } finally {
 
-    let inp = e.target.closest("[data-free]");
-
-    if (!inp) return;
-
-    let id = inp.dataset.free;
-
-    let keys = Object.keys(cart).filter(
-      k => k.startsWith(id + "|")
-    );
-
-    let n = keys.reduce(
-      (s, k) => s + cart[k],
-      0
-    );
-
-    keys.forEach(k => delete cart[k]);
-
-    if (n && inp.value.trim()) {
-      cart[key(id, inp.value.trim())] = n;
-    }
-
-    drawMenu();
-
-  };
-
-  // CAMBIO SCHERMATA
-
-  function tab(t) {
-
-    $("menuPage").classList.toggle(
-      "hidden",
-      t !== "menu"
-    );
-
-    $("recapPage").classList.toggle(
-      "hidden",
-      t !== "recap"
-    );
-
-    $("menuTab").classList.toggle(
-      "active",
-      t === "menu"
-    );
-
-    $("recapTab").classList.toggle(
-      "active",
-      t === "recap"
-    );
-
-    if (t === "recap") {
-      drawRecap();
-    }
+    $("save").disabled = false;
 
   }
 
-  $("menuTab").onclick = () => tab("menu");
-  $("recapTab").onclick = () => tab("recap");
+};
 
-  // NOME PIATTO + CONDIMENTO
+// AGGREGA QUANTITÀ
 
-  function label(k) {
+function aggregate() {
 
-    let [id, ...rest] = k.split("|");
+  let t = {};
 
-    return raw[+id].name +
-      (rest.join("|")
-        ? " — " + rest.join("|")
-        : "");
+  orders.forEach(o => {
 
-  }
-
-  // SALVATAGGIO ORDINE
-
-  $("save").onclick = async () => {
-
-    let name = $("name").value.trim();
-
-    let items = Object.fromEntries(
-      Object.entries(cart).filter(
-        ([k, v]) => v > 0
-      )
+    Object.entries(o.items).forEach(
+      ([k, v]) => {
+        t[k] = (t[k] || 0) + v;
+      }
     );
 
-    if (!name || !Object.keys(items).length) {
+  });
 
-      $("error").textContent =
-        "Inserisci il nome e scegli almeno un piatto.";
+  return t;
 
+}
+
+// DISEGNA RIEPILOGO
+
+function drawRecap() {
+
+  let t = aggregate();
+
+  $("n").textContent = orders.length;
+
+  $("people").textContent = orders.length;
+
+  $("plates").textContent =
+    Object.values(t).reduce((a, b) => a + b, 0);
+
+  $("totals").innerHTML =
+    Object.keys(t).length
+
+      ? Object.keys(t)
+          .sort(
+            (a, b) =>
+              +a.split("|")[0] -
+              +b.split("|")[0]
+          )
+          .map(k => `
+            <div class="row">
+              <span>${escape(label(k))}</span>
+              <strong>${t[k]} ×</strong>
+            </div>
+          `).join("")
+
+      : "Nessun ordine";
+
+  $("persons").innerHTML =
+    orders.length
+
+      ? orders.map(o => `
+
+        <div class="person">
+
+          <strong>${escape(o.name)}</strong>
+
+          <button data-edit="${escape(o.id)}">
+            Modifica
+          </button>
+
+          <button data-delete="${escape(o.id)}">
+            Elimina
+          </button>
+
+          ${Object.entries(o.items)
+            .map(([k, q]) => `
+              <div class="muted">
+                ${q} × ${escape(label(k))}
+              </div>
+            `).join("")}
+
+          ${
+            o.notes
+              ? `<div class="muted">
+                   Note: ${escape(o.notes)}
+                 </div>`
+              : ""
+          }
+
+        </div>
+
+      `).join("")
+
+      : "Nessun partecipante";
+
+}
+
+// MODIFICA O ELIMINA
+
+$("persons").onclick = async e => {
+
+  let b = e.target.closest("button");
+
+  if (!b) return;
+
+  let id = b.dataset.edit ?? b.dataset.delete;
+
+  let o = orders.find(x => x.id === id);
+
+  if (!o) return;
+
+  if (b.dataset.delete !== undefined) {
+
+    if (!confirm(
+      "Eliminare l'ordine di " + o.name + "?"
+    )) {
       return;
     }
-
-    let record = {
-      name,
-      items,
-      notes: $("notes").value.trim()
-    };
-
-    $("save").disabled = true;
 
     try {
 
       if (online) {
 
-        if (editing) {
-
-          await updateDoc(
-            doc(db, "ordini", editing),
-            record
-          );
-
-        } else {
-
-          await addDoc(coll, record);
-
-        }
+        await deleteDoc(
+          doc(db, "ordini", id)
+        );
 
       } else {
 
-        if (editing) {
-
-          let i = orders.findIndex(
-            o => o.id === editing
-          );
-
-          orders[i] = {
-            id: editing,
-            ...record
-          };
-
-        } else {
-
-          orders.push({
-            id: crypto.randomUUID(),
-            ...record
-          });
-
-        }
+        orders = orders.filter(
+          x => x.id !== id
+        );
 
       }
 
-      cart = {};
-      editing = null;
-
-      $("name").value = "";
-      $("notes").value = "";
-      $("error").textContent = "";
-
-      $("save").textContent =
-        "Conferma ordine";
-
-      drawMenu();
-      tab("recap");
+      drawRecap();
 
     } catch (e) {
 
-      $("error").textContent =
-        "Errore salvataggio: " + e.message;
-
-    } finally {
-
-      $("save").disabled = false;
+      alert(e.message);
 
     }
 
-  };
+  } else {
 
-  // TOTALI PER PIATTO
+    editing = id;
 
-  function aggregate() {
+    cart = { ...o.items };
 
-    let t = {};
+    $("name").value = o.name;
+    $("notes").value = o.notes;
 
-    orders.forEach(o => {
+    $("save").textContent = "Salva modifiche";
 
-      Object.entries(o.items).forEach(
-        ([k, v]) => {
+    filter = "Tutti";
 
-          t[k] = (t[k] || 0) + v;
-
-        }
-      );
-
-    });
-
-    return t;
+    drawMenu();
+    tab("menu");
 
   }
 
-  // RIEPILOGO
+};
 
-  function drawRecap() {
+// TESTO RIEPILOGO
 
-    let t = aggregate();
+function report() {
 
-    $("n").textContent = orders.length;
+  let t = aggregate();
 
-    $("people").textContent = orders.length;
+  return (
+    "BALANZONE 157 — " +
+    orders.length +
+    " persone\n\n" +
 
-    $("plates").textContent =
-      Object.values(t).reduce(
-        (a, b) => a + b,
-        0
-      );
+    "TOTALI\n" +
 
-    $("totals").innerHTML =
-      Object.keys(t).length
+    Object.keys(t).map(
+      k => t[k] + " × " + label(k)
+    ).join("\n") +
 
-        ? Object.keys(t)
-            .sort(
-              (a, b) =>
-                +a.split("|")[0] -
-                +b.split("|")[0]
-            )
-            .map(k => `
-              <div class="row">
-                <span>${escape(label(k))}</span>
-                <strong>${t[k]} ×</strong>
-              </div>
-            `).join("")
+    "\n\nPERSONE\n" +
 
-        : "Nessun ordine";
+    orders.map(o =>
 
-    $("persons").innerHTML =
-      orders.length
+      o.name + "\n" +
 
-        ? orders.map(o => `
-
-          <div class="person">
-
-            <strong>${escape(o.name)}</strong>
-
-            <button data-edit="${escape(o.id)}">
-              Modifica
-            </button>
-
-            <button data-delete="${escape(o.id)}">
-              Elimina
-            </button>
-
-            ${Object.entries(o.items)
-              .map(([k, q]) => `
-                <div class="muted">
-                  ${q} × ${escape(label(k))}
-                </div>
-              `).join("")}
-
-            ${
-              o.notes
-                ? `<div class="muted">
-                     Note: ${escape(o.notes)}
-                   </div>`
-                : ""
-            }
-
-          </div>
-
-        `).join("")
-
-        : "Nessun partecipante";
-
-  }
-
-  // MODIFICA / ELIMINA ORDINI
-
-  $("persons").onclick = async e => {
-
-    let b = e.target.closest("button");
-
-    if (!b) return;
-
-    let id = b.dataset.edit ?? b.dataset.delete;
-
-    let o = orders.find(x => x.id === id);
-
-    if (!o) return;
-
-    if (b.dataset.delete !== undefined) {
-
-      if (!confirm(
-        "Eliminare l’ordine di " + o.name + "?"
-      )) {
-        return;
-      }
-
-      try {
-
-        if (online) {
-
-          await deleteDoc(
-            doc(db, "ordini", id)
-          );
-
-        } else {
-
-          orders = orders.filter(
-            x => x.id !== id
-          );
-
-        }
-
-        drawRecap();
-
-      } catch (e) {
-
-        alert(e.message);
-
-      }
-
-    } else {
-
-      editing = id;
-
-      cart = { ...o.items };
-
-      $("name").value = o.name;
-      $("notes").value = o.notes;
-
-      $("save").textContent =
-        "Salva modifiche";
-
-      filter = "Tutti";
-
-      drawMenu();
-      tab("menu");
-
-    }
-
-  };
-
-  // TESTO RIEPILOGO PER RISTORANTE
-
-  function report() {
-
-    let t = aggregate();
-
-    return (
-      "BALANZONE 157 — " +
-      orders.length +
-      " persone\n\n" +
-
-      "TOTALI\n" +
-
-      Object.keys(t).map(
-        k => t[k] + " × " + label(k)
+      Object.entries(o.items).map(
+        ([k, q]) =>
+          q + " × " + label(k)
       ).join("\n") +
 
-      "\n\nPERSONE\n" +
+      (o.notes
+        ? "\nNote: " + o.notes
+        : "")
 
-      orders.map(o =>
+    ).join("\n\n")
+  );
 
-        o.name + "\n" +
+}
 
-        Object.entries(o.items).map(
-          ([k, q]) =>
-            q + " × " + label(k)
-        ).join("\n") +
+// COPIA RIEPILOGO
 
-        (o.notes
-          ? "\nNote: " + o.notes
-          : "")
-
-      ).join("\n\n")
-    );
-
-  }
-
-  // COPIA RIEPILOGO
-
-  $("copy").onclick = async () => {
-
-    try {
-
-      await navigator.clipboard.writeText(
-        report()
-      );
-
-      $("copy").textContent = "Copiato ✓";
-
-      setTimeout(() => {
-        $("copy").textContent =
-          "Copia riepilogo";
-      }, 1800);
-
-    } catch (e) {
-
-      alert(
-        "Copia non disponibile su questo browser"
-      );
-
-    }
-
-  };
-
-  // ESPORTAZIONE CSV
-
-  $("csv").onclick = () => {
-
-    let rows = [[
-      "Nome",
-      "Categoria",
-      "Piatto",
-      "Condimento",
-      "Quantità",
-      "Note"
-    ]];
-
-    orders.forEach(o => {
-
-      Object.entries(o.items).forEach(
-        ([k, q]) => {
-
-          let [id, ...opt] = k.split("|");
-
-          let d = raw[+id];
-
-          rows.push([
-            o.name,
-            d.cat,
-            d.name,
-            opt.join("|"),
-            q,
-            o.notes
-          ]);
-
-        }
-      );
-
-    });
-
-    let csv = "\ufeff" + rows.map(
-      r => r.map(
-        x => '"' +
-          String(x).replace(/"/g, '""') +
-          '"'
-      ).join(";")
-    ).join("\r\n");
-
-    let a = document.createElement("a");
-
-    a.href = URL.createObjectURL(
-      new Blob(
-        [csv],
-        { type: "text/csv;charset=utf-8" }
-      )
-    );
-
-    a.download = "ordini-pranzo.csv";
-
-    a.click();
-
-    setTimeout(() => {
-      URL.revokeObjectURL(a.href);
-    }, 1000);
-
-  };
-
-  // AVVIO APP
-
-  drawMenu();
-  drawRecap();
-
-  // COLLEGAMENTO AL DATABASE FIREBASE
+$("copy").onclick = async () => {
 
   try {
 
-    if (
-      !firebaseConfig.apiKey ||
-      firebaseConfig.apiKey.includes("INSERISCI")
-    ) {
-
-      throw Error(
-        "Configurazione Firebase non ancora inserita"
-      );
-
-    }
-
-    db = getFirestore(
-      initializeApp(firebaseConfig)
+    await navigator.clipboard.writeText(
+      report()
     );
 
-    coll = collection(db, "ordini");
+    $("copy").textContent = "Copiato ✓";
 
-    onSnapshot(
-
-      coll,
-
-      snap => {
-
-        orders = snap.docs.map(d => ({
-          id: d.id,
-          ...d.data()
-        }));
-
-        online = true;
-
-        $("status").textContent =
-          "🟢 Ordini condivisi online";
-
-        $("status").style.background =
-          "#e3f4e7";
-
-        drawRecap();
-
-      },
-
-      err => {
-
-        online = false;
-
-        $("status").textContent =
-          "Errore database: " + err.message;
-
-      }
-
-    );
+    setTimeout(() => {
+      $("copy").textContent = "Copia riepilogo";
+    }, 1800);
 
   } catch (e) {
 
-    $("status").textContent =
-      "⚠️ Modalità prova: gli ordini non sono condivisi. Controlla config.js.";
+    alert(
+      "Copia non disponibile su questo browser"
+    );
 
   }
+
+};
+
+// ESPORTA CSV
+
+$("csv").onclick = () => {
+
+  let rows = [[
+    "Nome",
+    "Categoria",
+    "Piatto",
+    "Condimento",
+    "Quantità",
+    "Note"
+  ]];
+
+  orders.forEach(o => {
+
+    Object.entries(o.items).forEach(
+      ([k, q]) => {
+
+        let [id, ...opt] = k.split("|");
+
+        let d = raw[+id];
+
+        rows.push([
+          o.name,
+          d.cat,
+          d.name,
+          opt.join("|"),
+          q,
+          o.notes
+        ]);
+
+      }
+    );
+
+  });
+
+  let csv = "\ufeff" + rows.map(
+    r => r.map(
+      x => '"' +
+        String(x).replace(/"/g, '""') +
+        '"'
+    ).join(";")
+  ).join("\r\n");
+
+  let a = document.createElement("a");
+
+  a.href = URL.createObjectURL(
+    new Blob(
+      [csv],
+      { type: "text/csv;charset=utf-8" }
+    )
+  );
+
+  a.download = "ordini-pranzo.csv";
+
+  a.click();
+
+  setTimeout(() => {
+    URL.revokeObjectURL(a.href);
+  }, 1000);
+
+};
+
+// AVVIO
+
+drawMenu();
+drawRecap();
+
+// COLLEGAMENTO FIREBASE
+
+try {
+
+  if (
+    !firebaseConfig.apiKey ||
+    firebaseConfig.apiKey.includes("INSERISCI")
+  ) {
+
+    throw Error(
+      "Configurazione Firebase non inserita"
+    );
+
+  }
+
+  db = getFirestore(
+    initializeApp(firebaseConfig)
+  );
+
+  coll = collection(db, "ordini");
+
+  onSnapshot(
+
+    coll,
+
+    snap => {
+
+      orders = snap.docs.map(d => ({
+        id: d.id,
+        ...d.data()
+      }));
+
+      online = true;
+
+      $("status").textContent =
+        "🟢 Ordini condivisi online";
+
+      $("status").style.background = "#e3f4e7";
+
+      drawRecap();
+
+    },
+
+    err => {
+
+      online = false;
+
+      $("status").textContent =
+        "Errore database: " + err.message;
+
+    }
+
+  );
+
+} catch (e) {
+
+  $("status").textContent =
+    "⚠️ Modalità prova: controlla config.js.";
+
+}
 
 </script>
 
